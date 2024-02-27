@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dcvx13xwdxc5h"
+path="res://.godot/imported/bird.ase-606d3273add4854d3944fbe72249e303.res"
+
+[deps]
+
+source_file="res://characters/bird/bird.ase"
+dest_files=["res://.godot/imported/bird.ase-606d3273add4854d3944fbe72249e303.res"]
+
+[params]
+

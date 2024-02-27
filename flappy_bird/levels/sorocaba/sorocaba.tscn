@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhd3valpt5km"]
+
+[ext_resource type="PackedScene" uid="uid://bcwn5l5cn7vpf" path="res://characters/bird/bird.tscn" id="1_dru5h"]
+[ext_resource type="Texture2D" uid="uid://bqotdcduvh483" path="res://levels/sorocaba/sorocaba_background.png" id="1_qv6h8"]
+
+[node name="Main" type="Node2D"]
+
+[node name="background" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_qv6h8")
+metadata/_aseprite_wizard_config_ = {
+"i_mode": 1,
+"keep_anim_length": false,
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"slice": "",
+"source": "res://levels/sorocaba/sorocaba_background.ase"
+}
+
+[node name="Bird" parent="." instance=ExtResource("1_dru5h")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
