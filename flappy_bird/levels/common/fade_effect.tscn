@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://gc8we2xtjg1f"]
+
+[ext_resource type="Script" path="res://levels/common/fade_effect.gd" id="1_knvp0"]
+
+[sub_resource type="Animation" id="Animation_yy6ex"]
+resource_name = "fade"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uj8c0"]
+_data = {
+"fade": SubResource("Animation_yy6ex")
+}
+
+[node name="FadeEffect" type="Node"]
+script = ExtResource("1_knvp0")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -144.0
+offset_top = -256.0
+offset_right = 144.0
+offset_bottom = 256.0
+color = Color(0, 0, 0, 0)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_uj8c0")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

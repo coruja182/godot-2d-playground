@@ -1,0 +1,43 @@
+[gd_scene load_steps=8 format=3 uid="uid://dhd3valpt5km"]
+
+[ext_resource type="Script" path="res://levels/common/game_manager.gd" id="1_6c42j"]
+[ext_resource type="PackedScene" uid="uid://bcwn5l5cn7vpf" path="res://characters/bird/bird.tscn" id="1_dru5h"]
+[ext_resource type="Texture2D" uid="uid://bqotdcduvh483" path="res://levels/sorocaba/sorocaba_background.png" id="1_qv6h8"]
+[ext_resource type="PackedScene" uid="uid://cii8dpj7hi0d3" path="res://levels/common/user_interface.tscn" id="1_w52a4"]
+[ext_resource type="PackedScene" uid="uid://gc8we2xtjg1f" path="res://levels/common/fade_effect.tscn" id="2_0qbcc"]
+[ext_resource type="PackedScene" uid="uid://lkajrwpdoo0i" path="res://levels/sorocaba/ground.tscn" id="3_4vc07"]
+[ext_resource type="PackedScene" uid="uid://pgt1kmmufxt2" path="res://levels/common/pipe_spawner.tscn" id="4_s6u1k"]
+
+[node name="Main" type="Node2D"]
+
+[node name="UI" parent="." instance=ExtResource("1_w52a4")]
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("1_6c42j")
+
+[node name="FadeEffect" parent="." instance=ExtResource("2_0qbcc")]
+
+[node name="background" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_qv6h8")
+metadata/_aseprite_wizard_config_ = {
+"i_mode": 1,
+"keep_anim_length": false,
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"slice": "",
+"source": "res://levels/sorocaba/sorocaba_background.ase"
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="PipeSpawner" parent="." instance=ExtResource("4_s6u1k")]
+
+[node name="Bird" parent="." instance=ExtResource("1_dru5h")]
+
+[node name="Ground" parent="." instance=ExtResource("3_4vc07")]
+position = Vector2(0, 200)

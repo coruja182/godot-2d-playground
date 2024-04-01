@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3 uid="uid://nyhnmq73c82m"]
+
+[ext_resource type="Texture2D" uid="uid://d3k3cess643os" path="res://models/pipe/pipe.png" id="1_78q5i"]
+[ext_resource type="Script" path="res://models/pipe/pipe_pair.gd" id="1_xwbqf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2c0dj"]
+size = Vector2(52, 350)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uta4a"]
+size = Vector2(4, 74)
+
+[node name="PipePair" type="Node2D"]
+script = ExtResource("1_xwbqf")
+
+[node name="TopPipe" type="Area2D" parent="."]
+position = Vector2(-1, -225)
+
+[node name="Sprite2D" type="Sprite2D" parent="TopPipe"]
+texture_filter = 1
+scale = Vector2(1, -1)
+texture = ExtResource("1_78q5i")
+metadata/_aseprite_wizard_config_ = {
+"i_mode": 1,
+"keep_anim_length": false,
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"slice": "",
+"source": "res://models/pipe/pipe.ase"
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopPipe"]
+shape = SubResource("RectangleShape2D_2c0dj")
+
+[node name="BottomPipe" type="Area2D" parent="."]
+position = Vector2(-1, 225)
+
+[node name="Sprite2D" type="Sprite2D" parent="BottomPipe"]
+texture_filter = 1
+texture = ExtResource("1_78q5i")
+metadata/_aseprite_wizard_config_ = {
+"i_mode": 1,
+"keep_anim_length": false,
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"slice": "",
+"source": "res://models/pipe/pipe.ase"
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomPipe"]
+shape = SubResource("RectangleShape2D_2c0dj")
+
+[node name="ScoreArea" type="Area2D" parent="."]
+position = Vector2(63, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreArea"]
+position = Vector2(-36, 0)
+shape = SubResource("RectangleShape2D_uta4a")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(27, 0)
+
+[connection signal="body_entered" from="TopPipe" to="." method="_on_pipe_hit"]
+[connection signal="body_entered" from="BottomPipe" to="." method="_on_pipe_hit"]
+[connection signal="body_exited" from="ScoreArea" to="." method="_on_scored"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

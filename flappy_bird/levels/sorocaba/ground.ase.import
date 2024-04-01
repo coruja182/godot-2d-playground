@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://db0julp3vuv78"
+path="res://.godot/imported/ground.ase-24b2b5822c7a9e02babb651241f3da15.res"
+
+[deps]
+
+source_file="res://levels/sorocaba/ground.ase"
+dest_files=["res://.godot/imported/ground.ase-24b2b5822c7a9e02babb651241f3da15.res"]
+
+[params]
+
