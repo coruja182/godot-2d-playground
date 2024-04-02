@@ -1,0 +1,529 @@
+[gd_scene load_steps=32 format=3 uid="uid://3muyyryhuk31"]
+
+[ext_resource type="Script" path="res://characters/astronaut/player.gd" id="1_q647e"]
+[ext_resource type="Texture2D" uid="uid://2twxj6rl411g" path="res://assets/warped-files/PNG/spritesheets/player/player-idle.png" id="2_g4u3l"]
+[ext_resource type="Texture2D" uid="uid://du43oqw20c6r1" path="res://assets/warped-files/PNG/spritesheets/player/player-run.png" id="3_svjr8"]
+[ext_resource type="Texture2D" uid="uid://bdweis2vq752m" path="res://assets/warped-files/PNG/spritesheets/player/player-jump.png" id="4_8lmyw"]
+[ext_resource type="PackedScene" uid="uid://djeq3p2dcpcnj" path="res://common/health_component/health_component.tscn" id="5_mcwxd"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_fdk3i"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="7_tgtcr"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_1dcs2"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_oce8u"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_wjjs4"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/animation_tree_state.gd" id="11_lip3v"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3iqkm"]
+radius = 5.0
+height = 40.0
+
+[sub_resource type="Animation" id="Animation_68pdx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_g4u3l")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:vframes")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_nneld"]
+resource_name = "double_Jump"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8lmyw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_xcrxy"]
+resource_name = "fall"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8lmyw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [5]
+}
+
+[sub_resource type="Animation" id="Animation_k1c7n"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_g4u3l")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_rey0g"]
+resource_name = "jump"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8lmyw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_31gm6"]
+resource_name = "run"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_svjr8")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hruc8"]
+_data = {
+"RESET": SubResource("Animation_68pdx"),
+"double_Jump": SubResource("Animation_nneld"),
+"fall": SubResource("Animation_xcrxy"),
+"idle": SubResource("Animation_k1c7n"),
+"jump": SubResource("Animation_rey0g"),
+"run": SubResource("Animation_31gm6")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h6jr0"]
+animation = &"double_Jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nluhr"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g5xd2"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6hgta"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_vung5"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_nluhr")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_g5xd2")
+blend_point_1/pos = 0.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_6hgta")
+blend_point_2/pos = 1.0
+blend_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wmec4"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e3uun"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0hlv0"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c3tuy"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vp5fd"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_51p7r"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_6ojif"]
+states/DoubleJump/node = SubResource("AnimationNodeAnimation_h6jr0")
+states/DoubleJump/position = Vector2(929, 98)
+states/End/position = Vector2(1158, 105)
+states/Move/node = SubResource("AnimationNodeBlendSpace1D_vung5")
+states/Move/position = Vector2(625, 98)
+states/idle/node = SubResource("AnimationNodeAnimation_wmec4")
+states/idle/position = Vector2(373, 98)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_e3uun"), "idle", "Move", SubResource("AnimationNodeStateMachineTransition_0hlv0"), "Move", "idle", SubResource("AnimationNodeStateMachineTransition_c3tuy"), "Move", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_vp5fd"), "DoubleJump", "Move", SubResource("AnimationNodeStateMachineTransition_51p7r")]
+
+[node name="Astronaut" type="CharacterBody2D"]
+position = Vector2(0, -26)
+collision_layer = 2
+script = ExtResource("1_q647e")
+SPEED = 200.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_3iqkm")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hruc8")
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_g4u3l")
+hframes = 4
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_hruc8")
+}
+tree_root = SubResource("AnimationNodeStateMachine_6ojif")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Move/blend_position = 0.0
+
+[node name="HealthComponent" parent="." instance=ExtResource("5_mcwxd")]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("6_fdk3i")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("7_tgtcr")
+
+[node name="Movement" type="Node" parent="StateChart/Root"]
+script = ExtResource("8_1dcs2")
+initial_state = NodePath("Grounded")
+
+[node name="Grounded" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("9_oce8u")
+
+[node name="On Jump" type="Node" parent="StateChart/Root/Movement/Grounded"]
+editor_description = "When jumping become airborne and enable double-jump."
+script = ExtResource("10_wjjs4")
+to = NodePath("../../Airborne/CanDoubleJump")
+event = &"jump"
+
+[node name="On Air" type="Node" parent="StateChart/Root/Movement/Grounded"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../Airborne")
+event = &"airborne"
+
+[node name="Airborne" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("8_1dcs2")
+initial_state = NodePath("CanDoubleJump")
+
+[node name="CoyoteJumpEnabled" type="Node" parent="StateChart/Root/Movement/Airborne"]
+script = ExtResource("9_oce8u")
+
+[node name="On Expiration" type="Node" parent="StateChart/Root/Movement/Airborne/CoyoteJumpEnabled"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../CanDoubleJump")
+delay_seconds = 0.1
+
+[node name="On Jump" type="Node" parent="StateChart/Root/Movement/Airborne/CoyoteJumpEnabled"]
+editor_description = "When jumping become airborne and enable double-jump."
+script = ExtResource("10_wjjs4")
+to = NodePath("../../CanDoubleJump")
+event = &"jump"
+
+[node name="CanDoubleJump" type="Node" parent="StateChart/Root/Movement/Airborne"]
+script = ExtResource("9_oce8u")
+
+[node name="On Double Jump" type="Node" parent="StateChart/Root/Movement/Airborne/CanDoubleJump"]
+editor_description = "When jumping become airborne and enable double-jump."
+script = ExtResource("10_wjjs4")
+to = NodePath("../../CannotJump")
+event = &"jump"
+
+[node name="On Grounded" type="Node" parent="StateChart/Root/Movement/Airborne"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../Grounded")
+event = &"grounded"
+
+[node name="CannotJump" type="Node" parent="StateChart/Root/Movement/Airborne"]
+script = ExtResource("9_oce8u")
+
+[node name="AnimationControl" type="Node" parent="StateChart/Root"]
+editor_description = "These states are bound to the animation tree and will trigger the corresponding animation states when activated. They are independent of the movement state, so they run in a separate substate in parallel to the movement state."
+script = ExtResource("8_1dcs2")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/AnimationControl"]
+editor_description = "This is the initial animation state"
+script = ExtResource("11_lip3v")
+animation_tree = NodePath("../../../../AnimationTree")
+state_name = &"idle"
+
+[node name="On Moving" type="Node" parent="StateChart/Root/AnimationControl/Idle"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../Move")
+event = &"moving"
+
+[node name="Move" type="Node" parent="StateChart/Root/AnimationControl"]
+editor_description = "This is the initial animation state"
+script = ExtResource("11_lip3v")
+animation_tree = NodePath("../../../../AnimationTree")
+state_name = &"Move"
+
+[node name="On Idle" type="Node" parent="StateChart/Root/AnimationControl/Move"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../Idle")
+event = &"idle"
+
+[node name="On Double Jump" type="Node" parent="StateChart/Root/AnimationControl/Move"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../DoubleJump")
+event = &"double_jump"
+
+[node name="DoubleJump" type="Node" parent="StateChart/Root/AnimationControl"]
+script = ExtResource("11_lip3v")
+animation_tree = NodePath("../../../../AnimationTree")
+state_name = &"DoubleJump"
+
+[node name="On Grounded" type="Node" parent="StateChart/Root/AnimationControl/DoubleJump"]
+script = ExtResource("10_wjjs4")
+to = NodePath("../../Move")
+event = &"grounded"
+
+[node name="_AnimationPlayer_345694" type="AnimationPlayer" parent="."]
+active = false
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_hruc8")
+}
+
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Airborne/CanDoubleJump" to="." method="_on_can_double_jump_state_physics_processing"]
+[connection signal="taken" from="StateChart/Root/Movement/Airborne/CanDoubleJump/On Double Jump" to="." method="_on_double_jump_taken"]
