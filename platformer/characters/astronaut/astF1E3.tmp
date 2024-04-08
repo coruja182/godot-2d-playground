@@ -516,10 +516,11 @@ script = ExtResource("8_adlq7")
 
 [node name="Run" type="Node" parent="StateMachine"]
 script = ExtResource("9_yrfbr")
+coyote_time_secs = null
 
 [node name="CoyoteTime" type="Timer" parent="StateMachine/Run"]
 process_callback = 0
-wait_time = 0.15
+wait_time = 0.06
 one_shot = true
 
 [node name="Crouch" type="Node" parent="StateMachine"]
@@ -527,5 +528,3 @@ script = ExtResource("10_r72vk")
 
 [node name="MoveComponent" type="Node" parent="."]
 script = ExtResource("6_nxsl3")
-
-[connection signal="timeout" from="StateMachine/Run/CoyoteTime" to="StateMachine/Run" method="_on_coyote_time_timeout"]

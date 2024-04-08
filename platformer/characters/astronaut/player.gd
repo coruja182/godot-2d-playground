@@ -4,77 +4,107 @@ class_name Player
 
 
 @export var SPEED = 300.0
-
-const JUMP_VELOCITY = -300.0
-
-const _EVENTS: Dictionary = { 
-	"GROUNDED": &"grounded",
-	"IDLE": &"idle",
-	"MOVING": &"moving",
-	"AIRBORNE": &"airborne",
-	"JUMP": &"jump",
-	"DOUBLE_JUMP": &"double_jump",
-}
+@export var JUMP_VELOCITY = -300.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+var _can_move_sideways = true
+var _can_shoot = true
+var _can_jump = true
 
-@onready var _sprite = $Sprite2D
-@onready var _state_chart: StateChart = $StateChart
-@onready var _animation_tree: AnimationTree = $AnimationTree
-@onready var _animation_state_machine: AnimationNodeStateMachinePlayback = _animation_tree.get("parameters/playback")
+# Positive is RIGHT, Negative is LEFT
+var _current_horizontal_direction: float
+
+@onready var _animation_tree = $AnimationTree as AnimationTree
+@onready var _playback = _animation_tree["parameters/playback"] as AnimationNodeStateMachinePlayback
+@onready var _state_machine: PlayerStateMachine = $StateMachine
+@onready var _move_component: MoveComponent = $MoveComponent
+@onready var _sprite_2d: Sprite2D = $Sprite2D
 
 
 func _ready():
 	_animation_tree.active = true
-
-
+	_state_machine.init(self, _move_component)
+	_current_horizontal_direction = scale.x
+	
+	
 func _physics_process(delta):
-
-	# handle left/right movement
-	var direction = Input.get_axis(Controls.LEFT, Controls.RIGHT)
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-
-	# flip the sprite. we do this before moving, so it flips
-	# even if we stand at a wall
-	if signf(velocity.x) != 0:
-		_sprite.flip_h = velocity.x < 0
-
 	move_and_slide()
+	_flip_character_if_needed(_move_component.get_input_direction().x)
 
-	# handle gravity
+	## handle gravity
 	if is_on_floor():
-		_state_chart.send_event(_EVENTS.GROUNDED)
 		velocity.y = 0
 	else:
-		## apply gravity
+		### apply gravity
 		velocity.y += gravity * delta
-		_state_chart.send_event(_EVENTS.AIRBORNE)
 
-	# let the state machine know if we are moving or not
-	if velocity.length_squared() <= 0.005:
-		_state_chart.send_event(_EVENTS.IDLE)
-	else:
-		_state_chart.send_event(_EVENTS.MOVING)
-
-	# set the velocity to the animation tree, so it can blend between animations
 	_animation_tree["parameters/Move/blend_position"] = signf(velocity.y)
 
-
-func _on_grounded_state_physics_processing(delta):
-	if Input.is_action_just_pressed(Controls.JUMP):
-		velocity.y = JUMP_VELOCITY
-		_state_chart.send_event(_EVENTS.JUMP)
-
-
-func _on_can_double_jump_state_physics_processing(delta):
-	if Input.is_action_just_pressed(Controls.JUMP):
-		velocity.y = JUMP_VELOCITY
-		_state_chart.send_event(_EVENTS.JUMP)
+# Scaling the whole node horizontally does not work
+# https://github.com/godotengine/godot/issues/78613
+func _flip_character_if_needed(new_horizontal_direction: float) -> void:
+	if new_horizontal_direction != 0:
+		_sprite_2d.flip_h = new_horizontal_direction < 0
 
 
-func _on_double_jump_taken():
-	_state_chart.send_event(_EVENTS.DOUBLE_JUMP)
+func is_idle() -> bool:
+	return is_on_floor() && velocity.x < .1 && velocity.x > -.1
+
+
+func can_jump() -> bool:
+	return _can_jump
+
+
+func on_air_or_fall() -> void:
+	_playback.travel("Move")
+
+
+func on_jump() -> void:
+	_can_shoot = true
+	_can_move_sideways = true
+	velocity.y = JUMP_VELOCITY
+	_playback.travel("Move")
+	
+
+func on_double_jump() -> void:
+	_can_shoot = true
+	_can_move_sideways = true
+	_can_jump = false
+	_playback.travel("DoubleJump")
+	velocity.y = JUMP_VELOCITY
+
+
+func on_landing() -> void:
+	print_debug("on_landing")
+
+
+func on_idle():
+	_playback.travel("Idle")
+	_can_shoot = true
+	_can_move_sideways = true
+	_can_jump = true
+	velocity = Vector2.ZERO
+
+
+func on_run() -> void:
+	_can_jump = true
+	_playback.travel("Run")
+
+
+func on_move_sideways(_delta: float = 0):
+	if _can_move_sideways:
+		var direction = _move_component.get_input_direction().x
+		velocity.x = direction * SPEED
+
+
+func on_crouch() -> void:
+	_playback.travel("Crouch")
+	velocity.x = 0
+	_can_move_sideways = false
+	_can_jump = false
+
+
+func on_leave_crouch() -> void:
+	_can_move_sideways = true
+	_can_jump = true

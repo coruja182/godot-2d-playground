@@ -1,17 +1,14 @@
-[gd_scene load_steps=48 format=3 uid="uid://3muyyryhuk31"]
+[gd_scene load_steps=36 format=3 uid="uid://3muyyryhuk31"]
 
 [ext_resource type="Script" path="res://characters/astronaut/player.gd" id="1_q647e"]
 [ext_resource type="Texture2D" uid="uid://2twxj6rl411g" path="res://assets/warped-files/PNG/spritesheets/player/player-idle.png" id="2_g4u3l"]
 [ext_resource type="Texture2D" uid="uid://du43oqw20c6r1" path="res://assets/warped-files/PNG/spritesheets/player/player-run.png" id="3_svjr8"]
 [ext_resource type="Texture2D" uid="uid://bdweis2vq752m" path="res://assets/warped-files/PNG/spritesheets/player/player-jump.png" id="4_8lmyw"]
 [ext_resource type="PackedScene" uid="uid://djeq3p2dcpcnj" path="res://common/health_component/health_component.tscn" id="5_mcwxd"]
-[ext_resource type="Texture2D" uid="uid://dl3wg727rop5j" path="res://assets/warped-files/PNG/sprites/player/player-duck/player-duck.png" id="5_mkj17"]
 [ext_resource type="Script" path="res://common/move_component/move_component.gd" id="6_nxsl3"]
 [ext_resource type="Script" path="res://characters/astronaut/state_machine.gd" id="7_pnyn6"]
-[ext_resource type="Script" path="res://characters/astronaut/states/idle.gd" id="8_8mrkd"]
 [ext_resource type="Script" path="res://characters/astronaut/states/air.gd" id="8_adlq7"]
 [ext_resource type="Script" path="res://characters/astronaut/states/run.gd" id="9_yrfbr"]
-[ext_resource type="Script" path="res://characters/astronaut/states/crouch.gd" id="10_r72vk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3iqkm"]
 radius = 5.0
@@ -331,72 +328,15 @@ tracks/3/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
-[sub_resource type="Animation" id="Animation_llmxx"]
-resource_name = "crouch"
-length = 0.1
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("5_mkj17")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:hframes")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D:vframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite2D:frame")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hruc8"]
 _data = {
 "RESET": SubResource("Animation_68pdx"),
-"crouch": SubResource("Animation_llmxx"),
 "double_Jump": SubResource("Animation_nneld"),
 "fall": SubResource("Animation_xcrxy"),
 "idle": SubResource("Animation_k1c7n"),
 "jump": SubResource("Animation_rey0g"),
 "run": SubResource("Animation_31gm6")
 }
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8ua5s"]
-animation = &"crouch"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h6jr0"]
 animation = &"double_Jump"
@@ -443,36 +383,44 @@ animation = &"run"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uw33u"]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2w6xj"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gaxh3"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4awgj"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o8ht2"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gttr3"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o0qao"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b4mlu"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n3q55"]
-
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_6ojif"]
-states/Crouch/node = SubResource("AnimationNodeAnimation_8ua5s")
-states/Crouch/position = Vector2(402, 307)
 states/DoubleJump/node = SubResource("AnimationNodeAnimation_h6jr0")
-states/DoubleJump/position = Vector2(620, 139)
+states/DoubleJump/position = Vector2(929, 98)
 states/End/position = Vector2(1141, 97)
 states/Idle/node = SubResource("AnimationNodeAnimation_wmec4")
-states/Idle/position = Vector2(394, 31)
+states/Idle/position = Vector2(373, 98)
 states/Move/node = SubResource("AnimationNodeBlendSpace1D_vung5")
-states/Move/position = Vector2(868, 23)
+states/Move/position = Vector2(625, 98)
 states/Run/node = SubResource("AnimationNodeAnimation_2145h")
-states/Run/position = Vector2(629, 307)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_e3uun"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_0hlv0"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_c3tuy"), "Move", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_vp5fd"), "DoubleJump", "Move", SubResource("AnimationNodeStateMachineTransition_51p7r"), "Idle", "Run", SubResource("AnimationNodeStateMachineTransition_bama1"), "Run", "Idle", SubResource("AnimationNodeStateMachineTransition_as6xo"), "Run", "Move", SubResource("AnimationNodeStateMachineTransition_dbqb8"), "Move", "Run", SubResource("AnimationNodeStateMachineTransition_uw33u"), "Run", "Crouch", SubResource("AnimationNodeStateMachineTransition_2w6xj"), "Crouch", "Run", SubResource("AnimationNodeStateMachineTransition_gaxh3"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_4awgj"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_o8ht2"), "DoubleJump", "Idle", SubResource("AnimationNodeStateMachineTransition_gttr3"), "Idle", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_o0qao"), "DoubleJump", "Run", SubResource("AnimationNodeStateMachineTransition_b4mlu"), "Run", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_n3q55")]
-graph_offset = Vector2(-209, -84)
+states/Run/position = Vector2(495, 197)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_e3uun"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_0hlv0"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_c3tuy"), "Move", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_vp5fd"), "DoubleJump", "Move", SubResource("AnimationNodeStateMachineTransition_51p7r"), "Idle", "Run", SubResource("AnimationNodeStateMachineTransition_bama1"), "Run", "Idle", SubResource("AnimationNodeStateMachineTransition_as6xo"), "Run", "Move", SubResource("AnimationNodeStateMachineTransition_dbqb8"), "Move", "Run", SubResource("AnimationNodeStateMachineTransition_uw33u")]
+
+[sub_resource type="GDScript" id="GDScript_4yfxr"]
+script/source = "extends State
+
+
+class_name PlayerIdleState
+
+
+# Virtual function. Corresponds to the `_physics_process()` callback.
+func physics_update(_delta: float) -> void:
+	if not parent.is_on_floor():
+		(state_machine as PlayerStateMachine).transition_to(\"Air\", { \"action\": \"on_fall\" })
+
+
+# Virtual function. Receives events from the `_unhandled_input()` callback.
+func handle_input(_event: InputEvent) -> void:
+	if move_component.wants_jump():
+		(state_machine as PlayerStateMachine).transition_to(\"Air\", { \"action\": \"on_jump\" })
+	elif move_component.wants_to_move_sideways():
+		(state_machine as PlayerStateMachine).transition_to(\"Run\")
+
+# Virtual function. Called by the state machine upon changing the active state. The `msg` parameter
+# is a dictionary with arbitrary data the state can use to initialize itself.
+func enter(_msg := {}) -> void:
+	print_debug(\"entered %s\" % name)
+	(parent as Player).on_idle()
+"
 
 [node name="Astronaut" type="CharacterBody2D"]
 position = Vector2(0, -26)
@@ -504,28 +452,18 @@ parameters/Move/blend_position = -0.000470161
 
 [node name="HealthComponent" parent="." instance=ExtResource("5_mcwxd")]
 
+[node name="MoveComponent" type="Node" parent="."]
+script = ExtResource("6_nxsl3")
+
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("7_pnyn6")
 initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("8_8mrkd")
+script = SubResource("GDScript_4yfxr")
 
 [node name="Air" type="Node" parent="StateMachine"]
 script = ExtResource("8_adlq7")
 
 [node name="Run" type="Node" parent="StateMachine"]
 script = ExtResource("9_yrfbr")
-
-[node name="CoyoteTime" type="Timer" parent="StateMachine/Run"]
-process_callback = 0
-wait_time = 0.15
-one_shot = true
-
-[node name="Crouch" type="Node" parent="StateMachine"]
-script = ExtResource("10_r72vk")
-
-[node name="MoveComponent" type="Node" parent="."]
-script = ExtResource("6_nxsl3")
-
-[connection signal="timeout" from="StateMachine/Run/CoyoteTime" to="StateMachine/Run" method="_on_coyote_time_timeout"]
