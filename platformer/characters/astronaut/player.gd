@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 class_name Player
 
+var BulletScene = preload("res://models/bullet/bullet.tscn")
 
 @export var SPEED = 300.0
 @export var JUMP_VELOCITY = -300.0
@@ -19,8 +20,9 @@ var _current_horizontal_direction: float
 @onready var _playback = _animation_tree["parameters/playback"] as AnimationNodeStateMachinePlayback
 @onready var _state_machine: PlayerStateMachine = $StateMachine
 @onready var _move_component: MoveComponent = $MoveComponent
-@onready var _sprite_2d: Sprite2D = $Sprite2D
-
+@onready var _horizontal_flip_container: Node2D = $HorizontalFlipContainer
+@onready var _muzzle: Marker2D = $HorizontalFlipContainer/Muzzle
+@onready var _shoot_timer: Timer = $ShootTimer
 
 func _ready():
 	_animation_tree.active = true
@@ -30,7 +32,7 @@ func _ready():
 	
 func _physics_process(delta):
 	move_and_slide()
-	_flip_character_if_needed(_move_component.get_input_direction().x)
+	_flip_character_if_needed()
 
 	## handle gravity
 	if is_on_floor():
@@ -43,9 +45,10 @@ func _physics_process(delta):
 
 # Scaling the whole node horizontally does not work
 # https://github.com/godotengine/godot/issues/78613
-func _flip_character_if_needed(new_horizontal_direction: float) -> void:
-	if new_horizontal_direction != 0:
-		_sprite_2d.flip_h = new_horizontal_direction < 0
+func _flip_character_if_needed() -> void:
+	if _move_component.get_input_direction().x != 0:
+		_horizontal_flip_container.scale.x = _move_component.get_input_direction().x
+	_current_horizontal_direction = _horizontal_flip_container.scale.x
 
 
 func is_idle() -> bool:
@@ -108,3 +111,18 @@ func on_crouch() -> void:
 func on_leave_crouch() -> void:
 	_can_move_sideways = true
 	_can_jump = true
+
+
+func on_shoot() -> void:
+	if _can_shoot:
+		_playback.travel("ShootStand")
+		var bullet_instance = BulletScene.instantiate() as BulletController
+		bullet_instance.global_position = _muzzle.global_position
+		bullet_instance.init(_current_horizontal_direction)
+		get_parent().add_child(bullet_instance)
+		_shoot_timer.start()
+		_can_shoot = false
+
+
+func _on_shoot_timer_timeout():
+	_can_shoot = true

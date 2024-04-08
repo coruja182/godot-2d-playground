@@ -18,6 +18,8 @@ func physics_update(_delta: float) -> void:
 func handle_input(_event: InputEvent) -> void:
 	if move_component.wants_jump():
 		(state_machine as PlayerStateMachine).transition_to("Air", { "action": "on_jump" })
+	elif move_component.wants_shoot():
+		(state_machine as PlayerStateMachine).transition_to("ShootStand")
 
 
 # Virtual function. Called by the state machine upon changing the active state. The `msg` parameter

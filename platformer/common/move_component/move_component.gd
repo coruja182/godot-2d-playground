@@ -4,7 +4,6 @@ extends Node
 class_name MoveComponent
 
 
-@export var can_move: bool = true
 var _input_direction: Vector2
 
 
@@ -30,3 +29,7 @@ func wants_to_move_sideways() -> bool:
 
 func wants_to_crouch() -> bool:
 	return _input_direction.y > 0
+
+
+func wants_shoot() -> bool:
+	return Input.is_action_just_pressed("Shoot")

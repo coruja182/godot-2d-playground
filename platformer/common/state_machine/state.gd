@@ -37,3 +37,7 @@ func enter(_msg := {}) -> void:
 # to clean up the state.
 func exit() -> void:
 	pass
+
+
+func on_animation_player_animation_finished(anim_name) -> void:
+	pass
