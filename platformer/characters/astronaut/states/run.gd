@@ -8,6 +8,8 @@ var _coyote_timer_running = false
 func handle_input(_event: InputEvent) -> void:
 	if move_component.wants_jump():
 		(state_machine as PlayerStateMachine).transition_to("Air", { "action": "on_jump"})
+	elif move_component.wants_dash():
+		(parent as Player).on_dash()
 	
 
 # Virtual function. Corresponds to the `_physics_process()` callback.
@@ -21,7 +23,6 @@ func physics_update(delta):
 
 	elif (parent.is_on_floor() and move_component.wants_to_crouch()):
 		(state_machine as PlayerStateMachine).transition_to("Crouch")
-
 	elif (parent as Player).is_idle():
 		(state_machine as PlayerStateMachine).transition_to("Idle")
 

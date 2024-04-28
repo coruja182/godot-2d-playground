@@ -1,7 +1,8 @@
-[gd_scene load_steps=58 format=3 uid="uid://3muyyryhuk31"]
+[gd_scene load_steps=59 format=3 uid="uid://3muyyryhuk31"]
 
 [ext_resource type="Script" path="res://characters/astronaut/player.gd" id="1_q647e"]
 [ext_resource type="Texture2D" uid="uid://2twxj6rl411g" path="res://assets/warped-files/PNG/spritesheets/player/player-idle.png" id="2_g4u3l"]
+[ext_resource type="PackedScene" uid="uid://b7n0nrd42v6q2" path="res://models/bullet/bullet.tscn" id="2_pn3ym"]
 [ext_resource type="Texture2D" uid="uid://du43oqw20c6r1" path="res://assets/warped-files/PNG/spritesheets/player/player-run.png" id="3_svjr8"]
 [ext_resource type="Texture2D" uid="uid://bdweis2vq752m" path="res://assets/warped-files/PNG/spritesheets/player/player-jump.png" id="4_8lmyw"]
 [ext_resource type="PackedScene" uid="uid://djeq3p2dcpcnj" path="res://common/health_component/health_component.tscn" id="5_mcwxd"]
@@ -547,13 +548,13 @@ states/ShootStand/node = SubResource("AnimationNodeAnimation_trkc3")
 states/ShootStand/position = Vector2(200, 307)
 states/Start/position = Vector2(200, 31)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_e3uun"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_0hlv0"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_c3tuy"), "Move", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_vp5fd"), "DoubleJump", "Move", SubResource("AnimationNodeStateMachineTransition_51p7r"), "Idle", "Run", SubResource("AnimationNodeStateMachineTransition_bama1"), "Run", "Idle", SubResource("AnimationNodeStateMachineTransition_as6xo"), "Run", "Move", SubResource("AnimationNodeStateMachineTransition_dbqb8"), "Move", "Run", SubResource("AnimationNodeStateMachineTransition_uw33u"), "Run", "Crouch", SubResource("AnimationNodeStateMachineTransition_2w6xj"), "Crouch", "Run", SubResource("AnimationNodeStateMachineTransition_gaxh3"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_4awgj"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_o8ht2"), "DoubleJump", "Idle", SubResource("AnimationNodeStateMachineTransition_gttr3"), "Idle", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_o0qao"), "DoubleJump", "Run", SubResource("AnimationNodeStateMachineTransition_b4mlu"), "Run", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_n3q55"), "ShootStand", "Idle", SubResource("AnimationNodeStateMachineTransition_vo0hf"), "Idle", "ShootStand", SubResource("AnimationNodeStateMachineTransition_nuadl"), "ShootStand", "Run", SubResource("AnimationNodeStateMachineTransition_m6gbd"), "Run", "ShootStand", SubResource("AnimationNodeStateMachineTransition_8pqms"), "ShootStand", "Crouch", SubResource("AnimationNodeStateMachineTransition_73l7q"), "Crouch", "ShootStand", SubResource("AnimationNodeStateMachineTransition_80gdn")]
-graph_offset = Vector2(-486, -28)
+graph_offset = Vector2(-711, -89)
 
 [node name="Astronaut" type="CharacterBody2D"]
 position = Vector2(0, -26)
 collision_layer = 2
 script = ExtResource("1_q647e")
-SPEED = 200.0
+BulletScene = ExtResource("2_pn3ym")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)
@@ -575,12 +576,9 @@ position = Vector2(16, -3)
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 callback_mode_process = 0
-libraries = {
-"": SubResource("AnimationLibrary_hruc8")
-}
 tree_root = SubResource("AnimationNodeStateMachine_6ojif")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Move/blend_position = -0.000470161
+parameters/Move/blend_position = -0.000872612
 
 [node name="HealthComponent" parent="." instance=ExtResource("5_mcwxd")]
 
@@ -615,7 +613,16 @@ script = ExtResource("6_nxsl3")
 wait_time = 0.1
 one_shot = true
 
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="DashCooldown" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine" method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="AnimationTree" to="StateMachine" method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="StateMachine/Run/CoyoteTime" to="StateMachine/Run" method="_on_coyote_time_timeout"]
 [connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

@@ -2,16 +2,22 @@ extends CharacterBody2D
 
 class_name Player
 
-var BulletScene = preload("res://models/bullet/bullet.tscn")
 
-@export var SPEED = 300.0
-@export var JUMP_VELOCITY = -300.0
+@export var SPEED = 300
+@export var DASH_SPEED = 800
+@export var JUMP_VELOCITY = -300
+@export var dash_speed = 1200
+@export var BulletScene: PackedScene
+
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var _can_move_sideways = true
 var _can_shoot = true
 var _can_jump = true
+var _can_dash = true
+var _is_dashing = false
+var _is_dashing_cooling_down = false
 
 # Positive is RIGHT, Negative is LEFT
 var _current_horizontal_direction: float
@@ -23,6 +29,9 @@ var _current_horizontal_direction: float
 @onready var _horizontal_flip_container: Node2D = $HorizontalFlipContainer
 @onready var _muzzle: Marker2D = $HorizontalFlipContainer/Muzzle
 @onready var _shoot_timer: Timer = $ShootTimer
+@onready var _dash_timer: Timer = $DashTimer
+@onready var _dash_cooldown_timer: Timer = $DashCooldown
+
 
 func _ready():
 	_animation_tree.active = true
@@ -38,10 +47,14 @@ func _physics_process(delta):
 	if is_on_floor():
 		velocity.y = 0
 	else:
-		### apply gravity
-		velocity.y += gravity * delta
+		velocity.y += (gravity * delta) if should_apply_gravity() else 0
 
 	_animation_tree["parameters/Move/blend_position"] = signf(velocity.y)
+
+
+func should_apply_gravity():
+	return not _is_dashing
+
 
 # Scaling the whole node horizontally does not work
 # https://github.com/godotengine/godot/issues/78613
@@ -79,7 +92,7 @@ func on_double_jump() -> void:
 
 
 func on_landing() -> void:
-	print_debug("on_landing")
+	pass
 
 
 func on_idle():
@@ -96,7 +109,7 @@ func on_run() -> void:
 
 
 func on_move_sideways(_delta: float = 0):
-	if _can_move_sideways:
+	if _can_move_sideways and not _is_dashing:
 		var direction = _move_component.get_input_direction().x
 		velocity.x = direction * SPEED
 
@@ -106,6 +119,7 @@ func on_crouch() -> void:
 	velocity.x = 0
 	_can_move_sideways = false
 	_can_jump = false
+	_can_dash = true
 
 
 func on_leave_crouch() -> void:
@@ -114,15 +128,41 @@ func on_leave_crouch() -> void:
 
 
 func on_shoot() -> void:
-	if _can_shoot:
-		_playback.travel("ShootStand")
-		var bullet_instance = BulletScene.instantiate() as BulletController
-		bullet_instance.global_position = _muzzle.global_position
-		bullet_instance.init(_current_horizontal_direction)
-		get_parent().add_child(bullet_instance)
-		_shoot_timer.start()
-		_can_shoot = false
+	if not _can_shoot: return
+	
+	_playback.travel("ShootStand")
+	var bullet_instance = BulletScene.instantiate() as BulletController
+	bullet_instance.global_position = _muzzle.global_position
+	bullet_instance.init(_current_horizontal_direction)
+	get_parent().add_child(bullet_instance)
+	_shoot_timer.start()
+	_can_shoot = false
+
+
+func get_can_dash() -> bool:
+	return _can_dash and not _is_dashing_cooling_down
+
+
+func on_dash() -> void:
+	if not get_can_dash(): return
+
+	_is_dashing = true
+	_dash_timer.start()
+	_can_jump = false
+	velocity.y = 0
+	velocity.x = _current_horizontal_direction * DASH_SPEED
 
 
 func _on_shoot_timer_timeout():
 	_can_shoot = true
+
+
+func _on_dash_timer_timeout():
+	_is_dashing = false
+	_is_dashing_cooling_down = true
+	_dash_cooldown_timer.start()
+
+
+func _on_dash_cooldown_timeout():
+	_is_dashing_cooling_down = false
+	_can_dash = true

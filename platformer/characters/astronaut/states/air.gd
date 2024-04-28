@@ -8,6 +8,11 @@ class_name PlayerAirState
 func handle_input(_event: InputEvent):
 	if move_component.wants_jump() && (parent as Player).can_jump():
 		(parent as Player).on_double_jump()
+		return
+
+	if move_component.wants_dash():
+		(parent as Player).on_dash()
+		return
 
 
 # Virtual function. Corresponds to the `_physics_process()` callback.
@@ -17,7 +22,6 @@ func physics_update(_delta):
 		(state_machine as PlayerStateMachine).transition_to("Idle")
 	elif parent.is_on_floor():
 		(state_machine as PlayerStateMachine).transition_to("Run")
-
 
 # Virtual function. Called by the state machine upon changing the active state. The `msg` parameter
 # is a dictionary with arbitrary data the state can use to initialize itself.

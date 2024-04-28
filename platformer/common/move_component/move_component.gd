@@ -33,3 +33,7 @@ func wants_to_crouch() -> bool:
 
 func wants_shoot() -> bool:
 	return Input.is_action_just_pressed("Shoot")
+
+
+func wants_dash() -> bool:
+	return Input.is_action_just_pressed("Dash")
